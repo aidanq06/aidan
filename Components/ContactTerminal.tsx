@@ -8,6 +8,12 @@ import { Input } from "@/Components/ui/input";
 import { Textarea } from "@/Components/ui/textarea";
 import { Terminal, Send, CheckCircle } from 'lucide-react';
 
+type TerminalLine = {
+  type: string;
+  text: string;
+  delay: number;
+};
+
 export default function ContactTerminal() {
   const [currentStep, setCurrentStep] = useState('idle');
   const [terminalLines, setTerminalLines] = useState([
@@ -16,7 +22,7 @@ export default function ContactTerminal() {
     { type: 'prompt', text: '> ', delay: 1000 }
   ]);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [displayedLines, setDisplayedLines] = useState([]);
+  const [displayedLines, setDisplayedLines] = useState<Array<{ type: string; text: string; delay: number }>>([]);
 
   useEffect(() => {
     const timeouts: ReturnType<typeof setTimeout>[] = [];
