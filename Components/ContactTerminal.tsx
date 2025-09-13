@@ -22,7 +22,7 @@ export default function ContactTerminal() {
     { type: 'prompt', text: '> ', delay: 1000 }
   ]);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [displayedLines, setDisplayedLines] = useState<Array<{ type: string; text: string; delay: number }>>([]);
+  const [displayedLines, setDisplayedLines] = useState<TerminalLine[]>([]);
 
   useEffect(() => {
     const timeouts: ReturnType<typeof setTimeout>[] = [];
@@ -38,7 +38,7 @@ export default function ContactTerminal() {
     return () => timeouts.forEach(clearTimeout);
   }, [terminalLines]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (currentStep !== 'idle' || !formData.name || !formData.email || !formData.message) return;
 

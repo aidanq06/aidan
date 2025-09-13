@@ -24,7 +24,7 @@ import ProjectCard from '../Components/ProjectCard';
 import SkillsGrid from '../Components/SkillsGrid';
 import ContactTerminal from '../Components/ContactTerminal';
 
-function Counter({ from, to, duration = 1.5 }) {
+function Counter({ from, to, duration = 1.5 }: { from: number; to: number; duration?: number }) {
   const [scope, animate] = useAnimate();
   const [isInView, setIsInView] = useState(false);
 
@@ -44,7 +44,7 @@ function Counter({ from, to, duration = 1.5 }) {
 }
 
 export default function Portfolio() {
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
@@ -53,7 +53,7 @@ export default function Portfolio() {
   const heroTaglineRef = useRef(null);
 
   useEffect(() => {
-    const sequence = [
+    const sequence: any[] = [
       [scope.current, { width: "auto" }, { duration: 1, delay: 1 }],
       [heroTaglineRef.current, { opacity: 1, y: 0 }, { duration: 0.8, at: "-0.5" }]
     ];
@@ -110,7 +110,7 @@ export default function Portfolio() {
     { title: 'Contact', href: '#contact' },
   ];
 
-  const scrollToSection = (href) => {
+  const scrollToSection = (href: string) => {
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -440,7 +440,7 @@ export default function Portfolio() {
               </p>
 
               <div className="flex flex-wrap gap-2 mb-8">
-                {selectedProject.tech.map((tech, i) => (
+                {selectedProject.tech.map((tech: string, i: number) => (
                   <span
                     key={i}
                     className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"

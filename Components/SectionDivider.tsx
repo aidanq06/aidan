@@ -3,7 +3,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export default function SectionDivider({ bgColor, flip = false }) {
+type SectionDividerProps = {
+  bgColor: string;
+  flip?: boolean;
+};
+
+export default function SectionDivider({ bgColor, flip = false }: SectionDividerProps) {
   const pathVariants = {
     initial: { d: "M0 50 Q 720 50 1440 50" },
     animate: { d: "M0 50 Q 720 100 1440 50", transition: { duration: 1, ease: "easeInOut" } },

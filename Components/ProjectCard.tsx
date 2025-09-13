@@ -5,7 +5,24 @@ import { motion } from 'framer-motion';
 import { Card } from "@/Components/ui/card";
 import { ExternalLink, Github, TrendingUp } from 'lucide-react';
 
-export default function ProjectCard({ project, index, onSelect }) {
+type Project = {
+  name: string;
+  category: string;
+  tech: string[];
+  description: string;
+  status: string;
+  performance: string;
+  githubUrl?: string;
+  liveUrl?: string;
+};
+
+type ProjectCardProps = {
+  project: Project;
+  index: number;
+  onSelect: (project: Project) => void;
+};
+
+export default function ProjectCard({ project, index, onSelect }: ProjectCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
