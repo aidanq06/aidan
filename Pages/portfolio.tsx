@@ -17,8 +17,8 @@ import {
   Clock,
   Menu
 } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/Components/ui/button";
+import { Card } from "@/Components/ui/card";
 
 import ProjectCard from '../Components/ProjectCard';
 import SkillsGrid from '../Components/SkillsGrid';

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Card } from "@/components/ui/card";
+import { Card } from "@/Components/ui/card";
 import { ExternalLink, Github, TrendingUp } from 'lucide-react';
 
 export default function ProjectCard({ project, index, onSelect }) {

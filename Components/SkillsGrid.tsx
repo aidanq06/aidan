@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Card } from "@/components/ui/card";
+import { Card } from "@/Components/ui/card";
 import { Code, Database, BrainCircuit, Layers } from 'lucide-react';
 
 export default function SkillsGrid() {
