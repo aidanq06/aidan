@@ -19,7 +19,7 @@ export default function ContactTerminal() {
   const [displayedLines, setDisplayedLines] = useState([]);
 
   useEffect(() => {
-    const timeouts: NodeJS.Timeout[] = [];
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
     // Reset displayed lines when terminalLines change
     setDisplayedLines([]); 
     
