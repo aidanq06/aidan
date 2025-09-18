@@ -16,21 +16,21 @@ export default function Portfolio() {
       name: 'ChartSense',
       description: 'AI-powered stock sentiment tracker with real-time market data and GPT summaries.',
       tech: ['Next.js', 'Supabase', 'SwiftUI', 'OpenAI'],
-      github: '#',
+      github: 'https://github.com/aidanq06',
       demo: '#'
     },
     {
       name: 'Compound',
       description: 'Fintech app that reframes revenge trading into healthier long-term investing habits.',
       tech: ['React Native', 'Supabase', 'Tailwind', 'GPT APIs'],
-      github: '#',
+      github: 'https://github.com/aidanq06',
       demo: '#'
     },
     {
       name: 'HabitPilot',
       description: 'AI-powered habit tracking with personalized study and lifestyle plans.',
       tech: ['SwiftUI', 'Firebase', 'GPT APIs'],
-      github: '#',
+      github: 'https://github.com/aidanq06',
       demo: '#'
     }
   ];
@@ -50,13 +50,13 @@ export default function Portfolio() {
             aidan quach
           </h1>
           <p className="text-lg text-gray-600 mb-6">
-            i am 19 and i love building
+            i am 18 and i love building
           </p>
           <div className="flex gap-4">
             <a href="https://github.com/aidanq06" className="text-gray-600 hover:text-gray-900 transition-colors">
               <Github className="w-5 h-5" />
             </a>
-            <a href="#" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <a href="https://www.linkedin.com/in/aidanq06/" className="text-gray-600 hover:text-gray-900 transition-colors">
               <Linkedin className="w-5 h-5" />
             </a>
             <a href="mailto:aidanquachdev@gmail.com" className="text-gray-600 hover:text-gray-900 transition-colors">
