@@ -50,11 +50,7 @@ export default function Portfolio() {
             aidan quach
           </h1>
           <div className="text-xs text-gray-400 mb-6 font-mono tracking-wide leading-tight">
-            <div className="flex items-center gap-3">
-              <span>813-219-2977</span>
-              <span className="text-gray-300">•</span>
-              <span>aidanquachdev@gmail.com</span>
-            </div>
+            <span>aidanquachdev[at]gmail[dot]com</span>
           </div>
           <p className="text-lg text-gray-600 mb-6">
             i am 18 and i love building
