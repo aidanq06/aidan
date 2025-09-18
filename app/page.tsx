@@ -46,9 +46,16 @@ export default function Portfolio() {
       <div className="max-w-4xl mx-auto px-6 py-20">
         {/* Header */}
         <header className="mb-20">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+          <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-2">
             aidan quach
           </h1>
+          <div className="text-xs text-gray-400 mb-6 font-mono tracking-wide leading-tight">
+            <div className="flex items-center gap-3">
+              <span>813-219-2977</span>
+              <span className="text-gray-300">•</span>
+              <span>aidanquachdev@gmail.com</span>
+            </div>
+          </div>
           <p className="text-lg text-gray-600 mb-6">
             i am 18 and i love building
           </p>
@@ -78,6 +85,7 @@ export default function Portfolio() {
               <span className="font-medium">experience</span>
               <ul className="mt-2 space-y-1 text-gray-600">
                 <li>• Software Engineering Intern @ DEX Imaging (Summer 2025)</li>
+                <li>• 1st Place - FBLA Coding & Programming Competition (States)</li>
                 <li>• 800+ commits across full-stack projects</li>
               </ul>
             </div>
