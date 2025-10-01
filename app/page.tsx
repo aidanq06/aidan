@@ -53,7 +53,7 @@ export default function Portfolio() {
             <span>aidanquachdev[at]gmail[dot]com</span>
           </div>
           <p className="text-lg text-gray-600 mb-6">
-            i am 18 and i love building
+            i am 18 and i love building — currently interning as a SWE at AfterQuery (YC W25)
           </p>
           <div className="flex gap-4">
             <a href="https://github.com/aidanq06" className="text-gray-600 hover:text-gray-900 transition-colors">
@@ -72,17 +72,17 @@ export default function Portfolio() {
         <section className="mb-20">
           <h2 className="text-2xl font-semibold mb-6">about</h2>
           <p className="text-gray-700 leading-relaxed mb-6">
-            Computer Science student at the University of Florida (Class of 2029). 
-            I build full-stack applications focused on finance, AI, and quantitative analysis. 
-            Currently working on projects that bridge technology and markets.
+            im currently a computer science student at the University of Florida (class of 2029). 
+            i build full-stack applications focused on finance, AI, and quantitative analysis. 
+            currently working on building AI training data with bash and python for AfterQuery's AI research infrastructure.
           </p>
           <div className="grid md:grid-cols-2 gap-6 text-sm">
             <div>
               <span className="font-medium">experience</span>
               <ul className="mt-2 space-y-1 text-gray-600">
+                <li>• ML Software Engineer @ AfterQuery (YC W25)</li>
                 <li>• Software Engineering Intern @ DEX Imaging (Summer 2025)</li>
                 <li>• 1st Place - FBLA Coding & Programming Competition (States)</li>
-                <li>• 800+ commits across full-stack projects</li>
               </ul>
             </div>
             <div>
