@@ -16,22 +16,22 @@ export default function Portfolio() {
       name: 'ChartSense',
       description: 'AI-powered stock sentiment tracker with real-time market data and GPT summaries.',
       tech: ['Next.js', 'Supabase', 'SwiftUI', 'OpenAI'],
-      github: 'https://github.com/aidanq06',
-      demo: '#'
+      github: 'https://github.com/aidanq06/ChartSense',
+      demo: 'https://github.com/aidanq06/ChartSense'
     },
     {
-      name: 'Compound',
-      description: 'Fintech app that reframes revenge trading into healthier long-term investing habits.',
-      tech: ['React Native', 'Supabase', 'Tailwind', 'GPT APIs'],
-      github: 'https://github.com/aidanq06',
-      demo: '#'
+      name: 'Carbon.AI₂',
+      description: 'Real-Time Carbon Footprint mobile application using Vision AI, Gemini, and Telemetry Fusion, built with swift.',
+      tech: ['Swift', 'Vision AI', 'Gemini', 'Core Location', 'iOS'],
+      github: 'https://github.com/aidanq06/carbon.ai2',
+      demo: 'https://www.youtube.com/watch?v=RE9tpsIcT-4'
     },
     {
       name: 'HabitPilot',
       description: 'AI-powered habit tracking with personalized study and lifestyle plans.',
       tech: ['SwiftUI', 'Firebase', 'GPT APIs'],
-      github: 'https://github.com/aidanq06',
-      demo: '#'
+      github: 'https://github.com/aidanq06/HabitPilot',
+      demo: 'https://github.com/aidanq06/HabitPilot'
     }
   ];
 
