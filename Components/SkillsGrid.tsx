@@ -38,13 +38,6 @@ export default function SkillsGrid() {
     },
   ];
 
-  const colors = {
-    blue: { bg: 'bg-blue-50', text: 'text-blue-600', border: 'border-blue-200' },
-    purple: { bg: 'bg-purple-50', text: 'text-purple-600', border: 'border-purple-200' },
-    green: { bg: 'bg-green-50', text: 'text-green-600', border: 'border-green-200' },
-    yellow: { bg: 'bg-yellow-50', text: 'text-yellow-600', border: 'border-yellow-200' },
-  }
-
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
       {skills.map((skill, index) => (

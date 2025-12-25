@@ -9,11 +9,6 @@ type SectionDividerProps = {
 };
 
 export default function SectionDivider({ bgColor, flip = false }: SectionDividerProps) {
-  const pathVariants = {
-    initial: { d: "M0 50 Q 720 50 1440 50" },
-    animate: { d: "M0 50 Q 720 100 1440 50", transition: { duration: 1, ease: "easeInOut" } },
-  };
-
   return (
     <div className={`relative ${bgColor} ${flip ? '-mt-1' : '-mb-1'}`}>
       <motion.svg

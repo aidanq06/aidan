@@ -74,7 +74,7 @@ export default function Portfolio() {
           <p className="text-gray-700 leading-relaxed mb-6">
             im currently a computer science student at the University of Florida (class of 2029). 
             i build full-stack applications focused on finance, AI, and quantitative analysis. 
-            currently working on building AI training data with bash and python for AfterQuery's AI research infrastructure.
+            currently working on building AI training data with bash and python for AfterQuery&apos;s AI research infrastructure.
           </p>
           <div className="grid md:grid-cols-2 gap-6 text-sm">
             <div>
@@ -161,7 +161,7 @@ export default function Portfolio() {
         <section>
           <h2 className="text-2xl font-semibold mb-6">contact</h2>
           <p className="text-gray-600 mb-4">
-            Let's build something together.
+            Let&apos;s build something together.
           </p>
           <a
             href="mailto:aidanquachdev@gmail.com"
