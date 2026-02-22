@@ -1,176 +1,378 @@
-
 "use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { 
-  Github, 
-  ExternalLink, 
-  Mail, 
-  Linkedin
-} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Github, Linkedin, Sun, Moon } from 'lucide-react';
+import { useTheme } from './ThemeProvider';
+
+type Project = {
+  name: string;
+  slug: string;
+  type: 'internal' | 'external';
+  route?: string;
+  description: string;
+  tech: string;
+  github?: string;
+  image: { width: number; height: number };
+  imageCount: number;
+};
+
+function ProjectItem({ project, index }: { project: Project; index: number }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const content = (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="group cursor-pointer p-5 rounded-2xl relative overflow-hidden"
+      style={{
+        background: isHovered
+          ? 'linear-gradient(135deg, var(--card-bg-hover-start) 0%, var(--card-bg-hover-end) 100%)'
+          : 'transparent',
+        border: '2px solid',
+        borderColor: isHovered ? 'var(--card-border-hover)' : 'var(--card-border)',
+        boxShadow: isHovered ? '0 8px 32px var(--card-shadow)' : '0 0 0 rgba(0,0,0,0)',
+        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={() => setIsHovered(!isHovered)}
+    >
+      <motion.div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle at 50% 0%, var(--card-gradient-overlay), transparent 70%)',
+          opacity: 0,
+        }}
+        animate={{ opacity: isHovered ? 1 : 0 }}
+        transition={{ duration: 0.4 }}
+      />
+
+      <div className="mb-5 flex gap-2.5 relative z-10">
+        {Array.from({ length: project.imageCount }).map((_, idx) => (
+          <motion.div
+            key={idx}
+            className="relative overflow-hidden"
+            style={{
+              flex: 1,
+              aspectRatio: `${project.image.width} / ${project.image.height}`,
+              borderRadius: '8px',
+              minWidth: 0,
+            }}
+            animate={{ y: isHovered ? -8 : 0, scale: isHovered ? 1.02 : 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30, delay: idx * 0.05 }}
+          >
+            <Image
+              src={`/images/projects/${project.slug}/${idx + 1}.png`}
+              alt={`${project.name} screenshot ${idx + 1}`}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, 300px"
+              style={{ borderRadius: '8px' }}
+            />
+            <motion.div
+              className="absolute inset-0 pointer-events-none"
+              style={{ boxShadow: '0 0 20px var(--image-glow)', borderRadius: '8px', opacity: 0 }}
+              animate={{ opacity: isHovered ? 1 : 0 }}
+              transition={{ duration: 0.3 }}
+            />
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ border: '1px solid var(--image-border)', borderRadius: '8px' }}
+            />
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="space-y-2.5 relative z-10">
+        <div className="flex items-baseline gap-3 flex-wrap">
+          <motion.h3
+            className="text-xl md:text-2xl font-semibold"
+            animate={{ color: isHovered ? 'var(--foreground)' : 'var(--secondary)' }}
+            transition={{ duration: 0.2 }}
+          >
+            {project.name.toLowerCase()}
+          </motion.h3>
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs hover:underline transition-all"
+              onClick={(e) => e.stopPropagation()}
+              style={{ color: 'var(--tertiary)' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--secondary)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--tertiary)'}
+            >
+              github →
+            </a>
+          )}
+        </div>
+
+        <div className="text-sm font-mono" style={{ color: 'var(--tertiary)' }}>
+          {project.tech.toLowerCase()}
+        </div>
+
+        <motion.div
+          initial={false}
+          animate={{ height: isHovered ? 'auto' : 0, opacity: isHovered ? 1 : 0 }}
+          transition={{
+            height: { duration: 0.3, ease: "easeInOut" },
+            opacity: { duration: 0.2, ease: "easeInOut" },
+          }}
+          className="overflow-hidden"
+        >
+          <motion.p
+            initial={{ y: -5 }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.2 }}
+            className="text-sm md:text-base pb-1"
+            style={{ color: 'var(--tertiary)' }}
+          >
+            {project.description.toLowerCase()}
+          </motion.p>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+
+  if (project.type === 'internal') {
+    return <Link href={project.route || '/'} className="block">{content}</Link>;
+  }
+
+  return content;
+}
+
+const projects: Project[] = [
+  {
+    name: 'ChartSense',
+    slug: 'chartsense',
+    type: 'external',
+    description: 'AI-powered stock sentiment tracker with real-time market data',
+    tech: 'Next.js, Supabase, OpenAI',
+    github: 'https://github.com/aidanq06/ChartSense',
+    image: { width: 150, height: 300 },
+    imageCount: 3,
+  },
+  {
+    name: 'Carbon.AI₂',
+    slug: 'carbonai',
+    type: 'external',
+    description: 'Real-time carbon footprint tracker using Vision AI',
+    tech: 'Swift, Vision AI, Gemini',
+    github: 'https://github.com/aidanq06/carbon.ai2',
+    image: { width: 150, height: 300 },
+    imageCount: 3,
+  },
+];
 
 export default function Portfolio() {
-  const projects = [
-    {
-      name: 'ChartSense',
-      description: 'AI-powered stock sentiment tracker with real-time market data and GPT summaries.',
-      tech: ['Next.js', 'Supabase', 'SwiftUI', 'OpenAI'],
-      github: 'https://github.com/aidanq06/ChartSense',
-      demo: 'https://github.com/aidanq06/ChartSense'
-    },
-    {
-      name: 'Carbon.AI₂',
-      description: 'Real-Time Carbon Footprint mobile application using Vision AI, Gemini, and Telemetry Fusion, built with swift.',
-      tech: ['Swift', 'Vision AI', 'Gemini', 'Core Location', 'iOS'],
-      github: 'https://github.com/aidanq06/carbon.ai2',
-      demo: 'https://www.youtube.com/watch?v=RE9tpsIcT-4'
-    },
-    {
-      name: 'HabitPilot',
-      description: 'AI-powered habit tracking with personalized study and lifestyle plans.',
-      tech: ['SwiftUI', 'Firebase', 'GPT APIs'],
-      github: 'https://github.com/aidanq06/HabitPilot',
-      demo: 'https://github.com/aidanq06/HabitPilot'
-    }
-  ];
+  const { theme, toggleTheme } = useTheme();
+  const [activeSection, setActiveSection] = useState<'about' | 'projects' | null>(null);
+  const [time, setTime] = useState('');
 
-  const skills = [
-    'JavaScript', 'TypeScript', 'React', 'Next.js', 'Node.js',
-    'Python', 'Swift', 'PostgreSQL', 'Supabase', 'Firebase',
-    'Tailwind CSS', 'Framer Motion', 'Git', 'AWS'
-  ];
+  useEffect(() => {
+    const startTime = performance.now();
+
+    const updateTime = () => {
+      const now = new Date();
+      const perfNow = performance.now();
+      const microseconds = Math.floor((perfNow - startTime) * 1000) % 1000000;
+
+      const estTimeString = now.toLocaleString('en-US', {
+        timeZone: 'America/New_York',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      });
+
+      const [dateStr, timeStr] = estTimeString.split(', ');
+      const [month, date, year] = dateStr.split('/');
+      const [hours, minutes, seconds] = timeStr.split(':');
+
+      const estDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+      const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+
+      const day = days[estDate.getDay()];
+      const monthName = months[parseInt(month) - 1];
+      const ms = now.getMilliseconds().toString().padStart(3, '0');
+      const us = Math.floor((microseconds % 1000) / 100).toString();
+
+      setTime(`${day} ${monthName} ${date} ${year} ${hours}:${minutes}:${seconds}.${ms}${us} est`);
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans">
-      <div className="max-w-4xl mx-auto px-6 py-20">
-        {/* Header */}
-        <header className="mb-20">
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-2">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
+      <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
+
+        <motion.header
+          className="mb-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          <h1 className="text-7xl md:text-9xl font-bold mb-4 tracking-tight">
             aidan quach
           </h1>
-          <div className="text-xs text-gray-400 mb-6 font-mono tracking-wide leading-tight">
-            <span>aidanquachdev[at]gmail[dot]com</span>
-          </div>
-          <p className="text-lg text-gray-600 mb-6">
-            i am 18 and i love building — currently interning as a SWE at AfterQuery (YC W25)
+
+          <p className="text-2xl md:text-3xl mb-3 max-w-3xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
+            i am 19 and i love building
           </p>
-          <div className="flex gap-4">
-            <a href="https://github.com/aidanq06" className="text-gray-600 hover:text-gray-900 transition-colors">
+          <p className="text-2xl md:text-3xl mb-6 max-w-3xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
+            currently interning as a swe at afterquery (yc w25)
+          </p>
+
+          <div className="text-sm mb-3 font-mono" style={{ color: 'var(--tertiary)' }}>
+            aidanquachdev[at]gmail[dot]com
+          </div>
+          <div className="text-sm mb-10 font-mono" style={{ color: 'var(--tertiary)' }}>
+            {time}
+          </div>
+
+          <div className="flex gap-6 items-center mb-10">
+            <a
+              href="https://github.com/aidanq06"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors"
+              style={{ color: 'var(--tertiary)' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--foreground)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--tertiary)'}
+              aria-label="GitHub"
+            >
               <Github className="w-5 h-5" />
             </a>
-            <a href="https://www.linkedin.com/in/aidanq06/" className="text-gray-600 hover:text-gray-900 transition-colors">
+            <a
+              href="https://www.linkedin.com/in/aidanq06/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors"
+              style={{ color: 'var(--tertiary)' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--foreground)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--tertiary)'}
+              aria-label="LinkedIn"
+            >
               <Linkedin className="w-5 h-5" />
             </a>
-            <a href="mailto:aidanquachdev@gmail.com" className="text-gray-600 hover:text-gray-900 transition-colors">
-              <Mail className="w-5 h-5" />
-            </a>
+            <button
+              onClick={toggleTheme}
+              className="transition-colors"
+              style={{ color: 'var(--tertiary)' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--foreground)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--tertiary)'}
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
           </div>
-        </header>
 
-        {/* About */}
-        <section className="mb-20">
-          <h2 className="text-2xl font-semibold mb-6">about</h2>
-          <p className="text-gray-700 leading-relaxed mb-6">
-            im currently a computer science student at the University of Florida (class of 2029). 
-            i build full-stack applications focused on finance, AI, and quantitative analysis. 
-            currently working on building AI training data with bash and python for AfterQuery&apos;s AI research infrastructure.
-          </p>
-          <div className="grid md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <span className="font-medium">experience</span>
-              <ul className="mt-2 space-y-1 text-gray-600">
-                <li>• ML Software Engineer @ AfterQuery (YC W25)</li>
-                <li>• Software Engineering Intern @ DEX Imaging (Summer 2025)</li>
-                <li>• 1st Place - FBLA Coding & Programming Competition (States)</li>
-              </ul>
-            </div>
-            <div>
-              <span className="font-medium">location</span>
-              <p className="mt-2 text-gray-600">Tampa, Florida</p>
-            </div>
+          <div className="flex gap-8">
+            <motion.button
+              onClick={() => setActiveSection(activeSection === 'about' ? null : 'about')}
+              className="text-xl md:text-2xl font-medium transition-all relative"
+              style={{ color: activeSection === 'about' ? 'var(--foreground)' : 'var(--secondary)' }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              about
+              {activeSection === 'about' && (
+                <motion.div
+                  layoutId="underline"
+                  className="absolute bottom-0 left-0 right-0 h-0.5"
+                  style={{ backgroundColor: 'var(--foreground)' }}
+                  initial={false}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+            </motion.button>
+            <motion.button
+              onClick={() => setActiveSection(activeSection === 'projects' ? null : 'projects')}
+              className="text-xl md:text-2xl font-medium transition-all relative"
+              style={{ color: activeSection === 'projects' ? 'var(--foreground)' : 'var(--secondary)' }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              projects
+              {activeSection === 'projects' && (
+                <motion.div
+                  layoutId="underline"
+                  className="absolute bottom-0 left-0 right-0 h-0.5"
+                  style={{ backgroundColor: 'var(--foreground)' }}
+                  initial={false}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+            </motion.button>
           </div>
-        </section>
+        </motion.header>
 
-        {/* Projects */}
-        <section className="mb-20">
-          <h2 className="text-2xl font-semibold mb-6">projects</h2>
-          <div className="space-y-8">
-            {projects.map((project, index) => (
+        <AnimatePresence>
+          {activeSection === 'about' && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="overflow-hidden mb-8"
+            >
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="border-l-2 border-gray-200 pl-6"
+                initial={{ y: -10 }}
+                animate={{ y: 0 }}
+                exit={{ y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="pt-2"
               >
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold mb-2">{project.name}</h3>
-                    <p className="text-gray-600 mb-3">{project.description}</p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.tech.map((tech, i) => (
-                        <span
-                          key={i}
-                          className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-sm"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <a
-                      href={project.github}
-                      className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded transition-colors text-sm"
-                    >
-                      <Github className="w-4 h-4" />
-                      code
-                    </a>
-                    <a
-                      href={project.demo}
-                      className="flex items-center gap-2 px-3 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded transition-colors text-sm"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      demo
-                    </a>
-                  </div>
+                <div className="space-y-4 text-lg md:text-xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
+                  <p>i build systems around language models.</p>
+                  <p>right now i&apos;m interested in agentic workflows, context engineering, and how llms interact with real software.</p>
+                  <p>i&apos;m a computer science student at the university of florida and spend most of my time experimenting with ai systems and building products.</p>
+                  <p>in my free time, i love lifting, playing tennis, and burning through claude code credits :)</p>
                 </div>
               </motion.div>
-            ))}
-          </div>
-        </section>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Skills */}
-        <section className="mb-20">
-          <h2 className="text-2xl font-semibold mb-6">skills</h2>
-          <div className="flex flex-wrap gap-2">
-            {skills.map((skill, index) => (
-              <span
-                key={index}
-                className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+        <AnimatePresence>
+          {activeSection === 'projects' && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="overflow-hidden"
+            >
+              <motion.div
+                initial={{ y: -10 }}
+                animate={{ y: 0 }}
+                exit={{ y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="pt-4"
               >
-                {skill}
-              </span>
-            ))}
-          </div>
-        </section>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-start">
+                  {projects.map((project, index) => (
+                    <ProjectItem key={project.slug} project={project} index={index} />
+                  ))}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Contact */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-6">contact</h2>
-          <p className="text-gray-600 mb-4">
-            Let&apos;s build something together.
-          </p>
-          <a
-            href="mailto:aidanquachdev@gmail.com"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded transition-colors"
-          >
-            <Mail className="w-4 h-4" />
-            Get in touch
-          </a>
-        </section>
       </div>
     </div>
   );
