@@ -313,7 +313,7 @@ export default function Portfolio() {
             key="about"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, ease: 'easeOut' }}
+            transition={{ duration: 0.45, ease: 'easeOut' }}
             className="mb-8 pt-2"
           >
             <div className="space-y-4 text-lg md:text-xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
