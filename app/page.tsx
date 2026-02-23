@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Github, Linkedin, Sun, Moon } from 'lucide-react';
@@ -19,15 +19,11 @@ type Project = {
   imageCount: number;
 };
 
-function ProjectItem({ project, index }: { project: Project; index: number }) {
+function ProjectItem({ project }: { project: Project }) {
   const [isHovered, setIsHovered] = useState(false);
 
   const content = (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+    <div
       className="group cursor-pointer p-5 rounded-2xl relative overflow-hidden"
       style={{
         background: isHovered
@@ -126,18 +122,12 @@ function ProjectItem({ project, index }: { project: Project; index: number }) {
           }}
           className="overflow-hidden"
         >
-          <motion.p
-            initial={{ y: -5 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.2 }}
-            className="text-sm md:text-base pb-1"
-            style={{ color: 'var(--tertiary)' }}
-          >
+          <p className="text-sm md:text-base pb-1" style={{ color: 'var(--tertiary)' }}>
             {project.description.toLowerCase()}
-          </motion.p>
+          </p>
         </motion.div>
       </div>
-    </motion.div>
+    </div>
   );
 
   if (project.type === 'internal') {
@@ -289,15 +279,14 @@ export default function Portfolio() {
               whileTap={{ scale: 0.95 }}
             >
               about
-              {activeSection === 'about' && (
-                <motion.div
-                  layoutId="underline"
-                  className="absolute bottom-0 left-0 right-0 h-0.5"
-                  style={{ backgroundColor: 'var(--foreground)' }}
-                  initial={false}
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
-              )}
+              <div
+                className="absolute bottom-0 left-0 right-0 h-0.5"
+                style={{
+                  backgroundColor: 'var(--foreground)',
+                  opacity: activeSection === 'about' ? 1 : 0,
+                  transition: 'opacity 0.2s ease',
+                }}
+              />
             </motion.button>
             <motion.button
               onClick={() => setActiveSection(activeSection === 'projects' ? null : 'projects')}
@@ -307,71 +296,50 @@ export default function Portfolio() {
               whileTap={{ scale: 0.95 }}
             >
               projects
-              {activeSection === 'projects' && (
-                <motion.div
-                  layoutId="underline"
-                  className="absolute bottom-0 left-0 right-0 h-0.5"
-                  style={{ backgroundColor: 'var(--foreground)' }}
-                  initial={false}
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
-              )}
+              <div
+                className="absolute bottom-0 left-0 right-0 h-0.5"
+                style={{
+                  backgroundColor: 'var(--foreground)',
+                  opacity: activeSection === 'projects' ? 1 : 0,
+                  transition: 'opacity 0.2s ease',
+                }}
+              />
             </motion.button>
           </div>
         </motion.header>
 
-        <AnimatePresence>
-          {activeSection === 'about' && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="overflow-hidden mb-8"
-            >
-              <motion.div
-                initial={{ y: -10 }}
-                animate={{ y: 0 }}
-                exit={{ y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="pt-2"
-              >
-                <div className="space-y-4 text-lg md:text-xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
-                  <p>i build systems around language models.</p>
-                  <p>right now i&apos;m interested in agentic workflows, context engineering, and how llms interact with real software.</p>
-                  <p>i&apos;m a computer science student at the university of florida and spend most of my time experimenting with ai systems and building products.</p>
-                  <p>in my free time, i love lifting, playing tennis, and burning through claude code credits :)</p>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {activeSection === 'about' && (
+          <motion.div
+            key="about"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: 'easeOut' }}
+            className="mb-8 pt-2"
+          >
+            <div className="space-y-4 text-lg md:text-xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
+              <p>i build systems around language models.</p>
+              <p>right now i&apos;m interested in agentic workflows, context engineering, and how llms interact with real software.</p>
+              <p>i&apos;m a computer science student at the university of florida and spend most of my time experimenting with ai systems and building products.</p>
+              <p>in my free time, i love lifting, playing tennis, and burning through claude code credits :)</p>
+            </div>
+          </motion.div>
+        )}
 
-        <AnimatePresence>
-          {activeSection === 'projects' && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="overflow-hidden"
-            >
-              <motion.div
-                initial={{ y: -10 }}
-                animate={{ y: 0 }}
-                exit={{ y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="pt-4"
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-start">
-                  {projects.map((project, index) => (
-                    <ProjectItem key={project.slug} project={project} index={index} />
-                  ))}
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {activeSection === 'projects' && (
+          <motion.div
+            key="projects"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: 'easeOut' }}
+            className="pt-4"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-start">
+              {projects.map((project) => (
+                <ProjectItem key={project.slug} project={project} />
+              ))}
+            </div>
+          </motion.div>
+        )}
 
       </div>
     </div>
