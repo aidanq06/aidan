@@ -17,6 +17,7 @@ type Project = {
   github?: string;
   image: { width: number; height: number };
   imageCount: number;
+  iframeUrl?: string;
 };
 
 function ProjectItem({ project }: { project: Project }) {
@@ -36,7 +37,13 @@ function ProjectItem({ project }: { project: Project }) {
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => setIsHovered(!isHovered)}
+      onClick={() => {
+        if (project.iframeUrl) {
+          window.open(project.iframeUrl, '_blank', 'noopener,noreferrer');
+        } else {
+          setIsHovered(!isHovered);
+        }
+      }}
     >
       <motion.div
         className="absolute inset-0 pointer-events-none"
@@ -48,27 +55,27 @@ function ProjectItem({ project }: { project: Project }) {
         transition={{ duration: 0.4 }}
       />
 
-      <div className="mb-5 flex gap-2.5 relative z-10">
-        {Array.from({ length: project.imageCount }).map((_, idx) => (
+      <div className="mb-5 relative z-10">
+        {project.iframeUrl ? (
           <motion.div
-            key={idx}
             className="relative overflow-hidden"
-            style={{
-              flex: 1,
-              aspectRatio: `${project.image.width} / ${project.image.height}`,
-              borderRadius: '8px',
-              minWidth: 0,
-            }}
+            style={{ borderRadius: '8px', height: '354px' }}
             animate={{ y: isHovered ? -8 : 0, scale: isHovered ? 1.02 : 1 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30, delay: idx * 0.05 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            <Image
-              src={`/images/projects/${project.slug}/${idx + 1}.png`}
-              alt={`${project.name} screenshot ${idx + 1}`}
-              fill
-              className="object-contain"
-              sizes="(max-width: 768px) 100vw, 300px"
-              style={{ borderRadius: '8px' }}
+            <iframe
+              src={project.iframeUrl}
+              title={project.name}
+              style={{
+                width: '1280px',
+                height: '950px',
+                transform: 'scale(0.425)',
+                transformOrigin: 'top left',
+                pointerEvents: 'none',
+                border: 'none',
+                borderRadius: '8px',
+                overflow: 'hidden',
+              }}
             />
             <motion.div
               className="absolute inset-0 pointer-events-none"
@@ -81,7 +88,43 @@ function ProjectItem({ project }: { project: Project }) {
               style={{ border: '1px solid var(--image-border)', borderRadius: '8px' }}
             />
           </motion.div>
-        ))}
+        ) : (
+          <div className="flex gap-2.5">
+            {Array.from({ length: project.imageCount }).map((_, idx) => (
+              <motion.div
+                key={idx}
+                className="relative overflow-hidden"
+                style={{
+                  flex: 1,
+                  aspectRatio: `${project.image.width} / ${project.image.height}`,
+                  borderRadius: '8px',
+                  minWidth: 0,
+                }}
+                animate={{ y: isHovered ? -8 : 0, scale: isHovered ? 1.02 : 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30, delay: idx * 0.05 }}
+              >
+                <Image
+                  src={`/images/projects/${project.slug}/${idx + 1}.png`}
+                  alt={`${project.name} screenshot ${idx + 1}`}
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 768px) 100vw, 300px"
+                  style={{ borderRadius: '8px' }}
+                />
+                <motion.div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ boxShadow: '0 0 20px var(--image-glow)', borderRadius: '8px', opacity: 0 }}
+                  animate={{ opacity: isHovered ? 1 : 0 }}
+                  transition={{ duration: 0.3 }}
+                />
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{ border: '1px solid var(--image-border)', borderRadius: '8px' }}
+                />
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="space-y-2.5 relative z-10">
@@ -138,6 +181,17 @@ function ProjectItem({ project }: { project: Project }) {
 }
 
 const projects: Project[] = [
+  {
+    name: 'WebBench',
+    slug: 'webbench',
+    type: 'external',
+    description: 'browser-based llm benchmarking suite — no api key or setup required, runs entirely via webgpu',
+    tech: 'Next.js, WebGPU, Transformers.js',
+    github: 'https://github.com/aidanq06/WebBench',
+    iframeUrl: 'https://web-bench-six.vercel.app',
+    image: { width: 16, height: 9 },
+    imageCount: 0,
+  },
   {
     name: 'ChartSense',
     slug: 'chartsense',
@@ -330,7 +384,7 @@ export default function Portfolio() {
             key="projects"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, ease: 'easeOut' }}
+            transition={{ duration: 0.45, ease: 'easeOut' }}
             className="pt-4"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-start">
