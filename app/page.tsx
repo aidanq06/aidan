@@ -20,6 +20,95 @@ type Project = {
   iframeUrl?: string;
 };
 
+const LOVE_WORDS = [
+  'building', 'tennis', 'vibecoding', 'working out', 'designing',
+  'biking', 'hot weather', 'fried rice', 'late nights',
+  'hanging with friends', 'long walks', 'reruns',
+];
+const LONGEST_LOVE_WORD = 'hanging with friends';
+
+function RotatingWord() {
+  const [wordIndex, setWordIndex] = useState(0);
+  const [typedChars, setTypedChars] = useState(0);
+  const [isSelected, setIsSelected] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const word = LOVE_WORDS[wordIndex];
+    const useHighlight = wordIndex % 2 === 1; // alternate: delete, highlight, delete, highlight...
+    type Phase = 'in' | 'hold' | 'out' | 'select';
+    let phase: Phase = 'in';
+    let chars = 0;
+
+    setTypedChars(0);
+    setIsSelected(false);
+
+    function step() {
+      if (cancelled) return;
+      if (phase === 'in') {
+        chars++;
+        setTypedChars(chars);
+        if (chars < word.length) {
+          setTimeout(step, 80);
+        } else {
+          phase = 'hold';
+          setTimeout(step, 1200);
+        }
+      } else if (phase === 'hold') {
+        if (useHighlight) {
+          phase = 'select';
+          setIsSelected(true);
+          setTimeout(step, 500);
+        } else {
+          phase = 'out';
+          setTimeout(step, 0);
+        }
+      } else if (phase === 'select') {
+        setIsSelected(false);
+        setTypedChars(0);
+        setTimeout(() => {
+          if (!cancelled) setWordIndex(i => (i + 1) % LOVE_WORDS.length);
+        }, 150);
+      } else {
+        chars--;
+        setTypedChars(chars);
+        if (chars > 0) {
+          setTimeout(step, 45);
+        } else {
+          setTimeout(() => {
+            if (!cancelled) setWordIndex(i => (i + 1) % LOVE_WORDS.length);
+          }, 200);
+        }
+      }
+    }
+
+    setTimeout(step, 80);
+    return () => { cancelled = true; };
+  }, [wordIndex]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <span className="relative inline-block overflow-hidden align-bottom whitespace-nowrap">
+      <span className="invisible select-none" aria-hidden>{LONGEST_LOVE_WORD}</span>
+      <span className="absolute inset-0 flex items-center justify-start">
+        <span
+          style={{
+            backgroundColor: isSelected ? 'var(--foreground)' : 'transparent',
+            color: isSelected ? 'var(--background)' : 'inherit',
+            borderRadius: '3px',
+            padding: isSelected ? '0 2px' : '0',
+            transition: 'background-color 0.12s ease, color 0.12s ease',
+          }}
+        >
+          {LOVE_WORDS[wordIndex].slice(0, typedChars)}
+        </span>
+        {!isSelected && (
+          <span className="animate-pulse" style={{ opacity: 0.5 }}>|</span>
+        )}
+      </span>
+    </span>
+  );
+}
+
 function ProjectItem({ project }: { project: Project }) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -274,7 +363,7 @@ export default function Portfolio() {
           </h1>
 
           <p className="text-2xl md:text-3xl mb-3 max-w-3xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
-            i am 19 and i love building
+            i am 19 and i love <RotatingWord />
           </p>
           <p className="text-2xl md:text-3xl mb-6 max-w-3xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
             currently interning as a swe at afterquery (yc w25)
