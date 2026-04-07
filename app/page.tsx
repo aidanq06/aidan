@@ -21,7 +21,7 @@ type Project = {
 };
 
 const LOVE_WORDS = [
-  'building', 'tennis', 'vibecoding', 'working out', 'designing',
+  'building', 'tennis', 'working out', 'designing',
   'biking', 'hot weather', 'fried rice', 'late nights',
   'hanging with friends', 'long walks', 'reruns',
 ];
