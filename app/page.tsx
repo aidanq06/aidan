@@ -366,7 +366,7 @@ export default function Portfolio() {
             i am 19 and i love <RotatingWord />
           </p>
           <p className="text-2xl md:text-3xl mb-6 max-w-3xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
-            currently interning as a swe at afterquery (yc w25)
+            working on RL environments at afterquery (yc w25)
           </p>
 
           <div className="text-sm mb-3 font-mono" style={{ color: 'var(--tertiary)' }}>

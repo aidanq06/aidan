@@ -6,8 +6,30 @@ import { ThemeProvider } from './ThemeProvider'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://aidanquach.dev'),
   title: 'Aidan Quach - Portfolio',
-  description: 'Quantitative Developer & AI Engineer - Building intelligent systems for financial markets',
+  description: 'working on RL environments at afterquery (yc w25)',
+  openGraph: {
+    title: 'Aidan Quach - Portfolio',
+    description: 'working on RL environments at afterquery (yc w25)',
+    url: 'https://aidanquach.dev',
+    siteName: 'Aidan Quach',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Aidan Quach - working on RL environments at afterquery (yc w25)',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Aidan Quach - Portfolio',
+    description: 'working on RL environments at afterquery (yc w25)',
+    images: ['/opengraph-image'],
+  },
 }
 
 export const viewport: Viewport = {
