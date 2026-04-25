@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -111,6 +111,17 @@ function RotatingWord() {
 
 function ProjectItem({ project }: { project: Project }) {
   const [isHovered, setIsHovered] = useState(false);
+  const iframeContainerRef = useRef<HTMLDivElement>(null);
+  const [iframeScale, setIframeScale] = useState(0.425);
+
+  useEffect(() => {
+    if (!project.iframeUrl || !iframeContainerRef.current) return;
+    const observer = new ResizeObserver(entries => {
+      setIframeScale(entries[0].contentRect.width / 1280);
+    });
+    observer.observe(iframeContainerRef.current);
+    return () => observer.disconnect();
+  }, [project.iframeUrl]);
 
   const content = (
     <div
@@ -147,8 +158,9 @@ function ProjectItem({ project }: { project: Project }) {
       <div className="mb-5 relative z-10">
         {project.iframeUrl ? (
           <motion.div
+            ref={iframeContainerRef}
             className="relative overflow-hidden"
-            style={{ borderRadius: '8px', height: '354px' }}
+            style={{ borderRadius: '8px', aspectRatio: '8/5' }}
             animate={{ y: isHovered ? -8 : 0, scale: isHovered ? 1.02 : 1 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
@@ -157,8 +169,8 @@ function ProjectItem({ project }: { project: Project }) {
               title={project.name}
               style={{
                 width: '1280px',
-                height: '950px',
-                transform: 'scale(0.425)',
+                height: '800px',
+                transform: `scale(${iframeScale})`,
                 transformOrigin: 'top left',
                 pointerEvents: 'none',
                 border: 'none',
@@ -166,6 +178,7 @@ function ProjectItem({ project }: { project: Project }) {
                 overflow: 'hidden',
               }}
             />
+            <div className="absolute inset-0" style={{ zIndex: 5 }} />
             <motion.div
               className="absolute inset-0 pointer-events-none"
               style={{ boxShadow: '0 0 20px var(--image-glow)', borderRadius: '8px', opacity: 0 }}
@@ -358,14 +371,14 @@ export default function Portfolio() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
         >
-          <h1 className="text-7xl md:text-9xl font-bold mb-4 tracking-tight">
+          <h1 className="font-bold mb-4 tracking-tight leading-none" style={{ fontSize: 'clamp(2rem, 12vw, 9rem)', marginLeft: '-0.04em' }}>
             aidan quach
           </h1>
 
-          <p className="text-2xl md:text-3xl mb-3 max-w-3xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
+          <p className="text-xl sm:text-2xl md:text-3xl mb-3 max-w-3xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
             i am 19 and i love <RotatingWord />
           </p>
-          <p className="text-2xl md:text-3xl mb-6 max-w-3xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
+          <p className="text-xl sm:text-2xl md:text-3xl mb-3 max-w-3xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
             working on RL environments at afterquery (yc w25)
           </p>
 
