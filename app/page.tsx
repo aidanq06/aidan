@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Github, Linkedin, Sun, Moon } from 'lucide-react';
@@ -106,6 +106,94 @@ function RotatingWord() {
         )}
       </span>
     </span>
+  );
+}
+
+type WorkRow = {
+  when: string;
+  where: string;
+  what: string;
+  detail?: string;
+};
+
+const WORK: WorkRow[] = [
+  { when: "summer '27", where: 'palantir', what: 'foundations', detail: 'helps companies run ai on their data. foundations builds the core systems beneath it all.' },
+  { when: "winter '27", where: 'rippling', what: 'platform', detail: 'payroll, hr, and it for startups. platform builds the shared employee record every product runs on.' },
+  { when: "summer '26", where: 'raymond james', what: 'financial infra', detail: 'manages money and advises on deals. financial infrastructure builds its compliance systems.' },
+  { when: "winter '26", where: 'afterquery', what: 'rl environments', detail: 'training data for ai labs. rl environments are where the models practice.' },
+];
+
+const LEDGER_GRID = 'grid grid-cols-1 md:grid-cols-[8rem_1fr] md:gap-x-8';
+const LEDGER_DIM = 'transition-colors duration-150 text-[color:var(--tertiary)] group-hover:text-[color:var(--secondary)]';
+
+function WorkLedger() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [canHover, setCanHover] = useState(false);
+
+  useEffect(() => {
+    setCanHover(window.matchMedia('(hover: hover)').matches);
+  }, []);
+
+  return (
+    <div className="mt-8 mb-10 max-w-5xl space-y-4 md:space-y-3">
+      {WORK.map((row, i) => {
+        const isOpen = openIndex === i;
+        const dimmed = openIndex !== null && !isOpen;
+        const toggle = () => setOpenIndex(isOpen ? null : i);
+        return (
+          <motion.div
+            key={row.where}
+            className={`group ${row.detail ? 'cursor-pointer md:cursor-default' : ''}`}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.4 + i * 0.08, ease: 'easeOut' }}
+            onMouseEnter={() => { if (canHover && row.detail) setOpenIndex(i); }}
+            onMouseLeave={() => { if (canHover && row.detail) setOpenIndex(null); }}
+            // whole row is the tap target on touch devices; hover handles desktop
+            onClick={() => { if (!canHover && row.detail) toggle(); }}
+          >
+            <motion.div animate={{ opacity: dimmed ? 0.5 : 1 }} transition={{ duration: 0.2 }}>
+              <div className={`${LEDGER_GRID} leading-relaxed`}>
+                <span className={`text-sm md:text-xl tabular-nums whitespace-nowrap ${LEDGER_DIM}`}>{row.when}</span>
+                <span className="text-base md:text-xl">
+                  <span style={{ color: 'var(--secondary)' }}>{row.where}</span>
+                  <span className={LEDGER_DIM}> · </span>
+                  {row.detail ? (
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); toggle(); }}
+                      aria-expanded={isOpen}
+                      className={`underline decoration-dotted underline-offset-4 ${LEDGER_DIM}`}
+                    >
+                      {row.what}
+                    </button>
+                  ) : (
+                    <span className={LEDGER_DIM}>{row.what}</span>
+                  )}
+                </span>
+              </div>
+              <AnimatePresence initial={false}>
+                {isOpen && row.detail && (
+                  <motion.div
+                    key="detail"
+                    className="overflow-hidden"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                  >
+                    <div className={`${LEDGER_GRID} text-sm md:text-base leading-relaxed pt-0.5 pb-1`} style={{ color: 'var(--tertiary)' }}>
+                      <span className="hidden md:block" />
+                      <span className="text-balance">{row.detail}</span>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </motion.div>
+        );
+      })}
+    </div>
   );
 }
 
@@ -371,19 +459,19 @@ export default function Portfolio() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
         >
-          <h1 className="font-bold mb-4 tracking-tight leading-none" style={{ fontSize: 'clamp(2rem, 12vw, 9rem)', marginLeft: '-0.04em' }}>
-            aidan quach
-          </h1>
+          <div className="space-y-2">
+            <h1 className="font-bold tracking-tight leading-none" style={{ fontSize: 'clamp(2rem, 12vw, 9rem)', marginLeft: '-0.04em' }}>
+              aidan quach
+            </h1>
+            <p className="text-xl sm:text-2xl md:text-3xl max-w-3xl leading-tight" style={{ color: 'var(--secondary)' }}>
+              i am 19 and i love <RotatingWord />
+            </p>
+          </div>
 
-          <p className="text-xl sm:text-2xl md:text-3xl mb-3 max-w-3xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
-            i am 19 and i love <RotatingWord />
-          </p>
-          <p className="text-xl sm:text-2xl md:text-3xl mb-3 max-w-3xl leading-relaxed" style={{ color: 'var(--secondary)' }}>
-            working on RL environments at afterquery (yc w25)
-          </p>
+          <WorkLedger />
 
           <div className="text-sm mb-3 font-mono" style={{ color: 'var(--tertiary)' }}>
-            aidanquachdev[at]gmail[dot]com
+            aidanquach1[at]ufl.edu
           </div>
           <div className="text-sm mb-10 font-mono" style={{ color: 'var(--tertiary)' }}>
             {time}

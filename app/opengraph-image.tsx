@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'Aidan Quach - working on RL environments at afterquery (yc w25)'
+export const alt = 'Aidan Quach - incoming at palantir & rippling · previously at raymond james & afterquery'
 export const size = {
   width: 1200,
   height: 630,
@@ -65,14 +65,33 @@ export default function OpenGraphImage() {
         <div
           style={{
             display: 'flex',
+            flexDirection: 'column',
             maxWidth: '980px',
-            fontSize: 64,
-            lineHeight: 1.07,
-            fontWeight: 700,
-            textWrap: 'balance',
+            gap: '20px',
           }}
         >
-          working on RL environments at afterquery (yc w25)
+          <div
+            style={{
+              display: 'flex',
+              fontSize: 64,
+              lineHeight: 1.07,
+              fontWeight: 700,
+              textWrap: 'balance',
+            }}
+          >
+            incoming at palantir &amp; rippling
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              fontSize: 32,
+              lineHeight: 1.2,
+              fontWeight: 500,
+              color: '#cbd5e1',
+            }}
+          >
+            previously at raymond james &amp; afterquery
+          </div>
         </div>
 
         <div
