@@ -1,10 +1,6 @@
-import './globals.css'
+import './portfolio.css'
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
-import { ThemeProvider } from './ThemeProvider'
 import { Analytics } from '@vercel/analytics/next'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://aidanquach.dev'),
@@ -44,9 +40,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ThemeProvider>{children}</ThemeProvider>
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: "try{document.documentElement.dataset.theme=localStorage.getItem('aq-portfolio-theme')==='light'?'light':'dark'}catch(e){}" }} /></head>
+      <body className="transcript">
+        {children}
         <Analytics />
       </body>
     </html>
